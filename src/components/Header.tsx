@@ -7,19 +7,21 @@ import WalletButton from './WalletButton'
 export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-14 border-b border-white/8 bg-card/96 backdrop-blur-md">
-      <div className="flex h-full items-center justify-between gap-4 px-4 md:pl-[15rem] md:pr-6">
-        <Link href="/" className="flex items-center flex-shrink-0">
-          <Image
-            src="/rekt-logo-transparent.png"
-            alt="Rekt Palace"
-            width={124}
-            height={48}
-            className="h-8 w-auto md:h-9"
-            priority
-          />
-        </Link>
+      <div className="grid h-full grid-cols-[auto_1fr] items-center gap-3 px-4 md:grid-cols-[14rem_minmax(0,1fr)] md:px-0">
+        <div className="flex h-full items-center px-4 md:border-r md:border-white/8 md:px-5">
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <Image
+              src="/rekt-logo-transparent.png"
+              alt="Rekt Palace"
+              width={124}
+              height={48}
+              className="h-8 w-auto md:h-9"
+              priority
+            />
+          </Link>
+        </div>
 
-        <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center justify-end gap-2 px-1 sm:gap-3 md:px-6">
           <Link
             href="/markets"
             className="hidden lg:flex relative w-80 xl:w-96 items-center rounded-xl border border-border bg-background/90 px-4 py-2 text-sm text-foreground/72 hover:border-primary/40 hover:text-white transition-colors"

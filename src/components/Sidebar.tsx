@@ -51,20 +51,20 @@ export default function Sidebar() {
         key={item.href}
         href={item.href}
         onClick={() => setMobileOpen(false)}
-        className={`group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-all ${
+        className={`group flex items-center gap-3.5 rounded-xl px-3 py-3 text-base font-semibold transition-all ${
           active
             ? 'bg-primary/14 text-white border border-primary/35 shadow-[0_0_20px_rgba(108,92,231,0.12)]'
-            : 'text-foreground/78 hover:text-white hover:bg-card-hover border border-transparent'
+            : 'text-foreground/92 hover:text-white hover:bg-card-hover border border-transparent'
         }`}
       >
         <span
-          className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
-            active ? 'bg-primary/18 text-primary' : 'bg-background/60 text-foreground/65 group-hover:text-white'
+          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+            active ? 'bg-primary/18 text-primary' : 'bg-background/60 text-foreground/78 group-hover:text-white'
           }`}
         >
-          <Icon className="h-4 w-4" />
+          <Icon className="h-[18px] w-[18px]" />
         </span>
-        <span>{item.label}</span>
+        <span className="tracking-[0.01em]">{item.label}</span>
       </Link>
     )
   }
@@ -79,14 +79,14 @@ export default function Sidebar() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center rounded-xl px-3 py-2.5 text-sm font-semibold text-foreground/82 hover:bg-card-hover hover:text-white transition-colors"
+              className="flex items-center justify-center rounded-xl px-3 py-2.5 text-base font-semibold text-foreground/90 hover:bg-card-hover hover:text-white transition-colors"
             >
               Casino
             </a>
             <Link
               href="/markets"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center rounded-xl bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_0_20px_rgba(108,92,231,0.28)] transition-colors hover:bg-primary-hover"
+              className="flex items-center justify-center rounded-xl bg-primary px-3 py-2.5 text-base font-semibold text-primary-foreground shadow-[0_0_20px_rgba(108,92,231,0.28)] transition-colors hover:bg-primary-hover"
             >
               Predictions
             </Link>
@@ -96,7 +96,7 @@ export default function Sidebar() {
 
       <nav className="py-4 px-2">
         <div className="px-2 pb-2">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-primary/85">
+          <span className="text-sm font-bold uppercase tracking-[0.18em] text-primary/92">
             Prediction Products
           </span>
         </div>
@@ -107,7 +107,7 @@ export default function Sidebar() {
         <div className="my-5 mx-2 border-t border-border" />
 
         <div className="px-2 pb-2">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-foreground/58">
+          <span className="text-sm font-bold uppercase tracking-[0.18em] text-foreground/72">
             More
           </span>
         </div>
