@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /demo-login
+Disallow: /blocked
+Disallow: /risk-notice
+
+Sitemap: https://blizzmarkets.com/sitemap.xml

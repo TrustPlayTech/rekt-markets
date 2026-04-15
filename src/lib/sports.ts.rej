@@ -1,0 +1,30 @@
+--- sports.ts
++++ sports.ts
+@@ -298,11 +298,24 @@
+ 
+ // Main function to get sports for the homepage (uses upcoming)
+ export async function getSportsEvents(): Promise<SportsEvent[]> {
+   const apiKey = process.env.ODDS_API_KEY
+   console.log('ODDS_API_KEY present:', !!apiKey)
+ 
+   if (apiKey) {
+     try {
+-      const events = await getUpcomingEvents(apiKey)
+-      console.log(`Fetched ${events.length} upcoming sports events from API (6hr cache)`)
+-      if (events.length > 0) return events
++      // Top 10 most popular sports to feature on the main page.
++      // Cached at 1 hour per sport = 10 * 3 = 30 credits / hour = 720 / day = ~21,600 / month.
++      // Perfectly utilizes the 20k limit while showing full data for top leagues.
++      const topSports = [
++        'basketball_nba', 'soccer_epl', 'mma_mixed_martial_arts', 
++        'baseball_mlb', 'icehockey_nhl', 'tennis_atp_miami_open', 
++        'soccer_uefa_champs_league', 'soccer_spain_la_liga', 
++        'basketball_ncaab', 'boxing_boxing'
++      ]
++      
++      const results = await Promise.allSettled(
++        topSports.map(sport => getSportEvents(apiKey, sport))
++      )
++      
++      const events: SportsEvent[] = []
++      for (const res of results) {

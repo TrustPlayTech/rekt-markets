@@ -1,0 +1,40 @@
+# Rekt Markets
+
+## Overview
+
+Rekt Markets is a prediction market and token launchpad platform built on Base, the Ethereum Layer 2 network developed by Coinbase. The platform enables users to trade on real-world event outcomes, bet on sports, and launch tokens via bonding curve mechanics.
+
+## Platform
+- Platform: markets.rektpalace.com
+- Company: Meta Bliss Group B.V.
+- Parent Company: 36 Group AB
+- Blockchain: Base
+- Collateral: USDC
+
+## Core Features
+- Prediction markets for real-world events
+- Sports markets and event trading
+- Token launchpad with bonding curves
+- On-chain settlement
+- Wallet-based access
+
+## Legal
+- Terms of Use
+- Privacy Policy
+- Cookie Policy
+- AML/KYC Policy
+- DMCA Guidelines
+- Trademark Guidelines
+- Risk Disclosures
+- Refund and Cancellation Policy
+
+## Key Pages
+- Website: https://markets.rektpalace.com
+- Sports: https://markets.rektpalace.com/sports
+- Markets: https://markets.rektpalace.com/markets
+- Launchpad: https://markets.rektpalace.com/launchpad
+- Terms: https://markets.rektpalace.com/terms
+- Privacy: https://markets.rektpalace.com/privacy
+- Support: https://markets.rektpalace.com/support
+- Twitter/X: https://x.com/rektcasino
+- Telegram: https://t.me/rektcrypto

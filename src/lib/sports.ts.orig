@@ -1,0 +1,291 @@
+// Sports data fetcher - The Odds API
+// Implements aggressive caching strategy to stay within 500 credits/month free tier
+
+const ODDS_API_BASE = 'https://api.the-odds-api.com/v4'
+
+export interface OddsOutcome {
+  name: string
+  price: number // decimal odds
+  point?: number // spread/totals point
+}
+
+export interface OddsMarket {
+  key: string // h2h, spreads, totals
+  outcomes: OddsOutcome[]
+}
+
+export interface OddsBookmaker {
+  key: string
+  title: string
+  markets: OddsMarket[]
+}
+
+export interface SportsEvent {
+  id: string
+  sport_key: string
+  sport_title: string
+  commence_time: string // ISO
+  home_team: string
+  away_team: string
+  bookmakers: OddsBookmaker[]
+  completed?: boolean
+  scores?: { name: string; score: string }[] | null
+}
+
+export interface Sport {
+  key: string
+  group: string
+  title: string
+  description: string
+  active: boolean
+  has_outrights: boolean
+}
+
+export type SportCategory = 'all' | 'live' | 'basketball' | 'soccer' | 'mma' | 'baseball' | 'icehockey' | 'americanfootball' | 'tennis' | 'boxing' | 'cricket' | 'golf' | 'rugbyleague' | 'aussierules'
+
+export const SPORT_CATEGORIES: { key: SportCategory; label: string; emoji: string }[] = [
+  { key: 'all', label: 'All', emoji: '🔥' },
+  { key: 'live' as SportCategory, label: 'Live', emoji: '🔴' },
+  { key: 'basketball', label: 'Basketball', emoji: '🏀' },
+  { key: 'soccer', label: 'Football', emoji: '⚽' },
+  { key: 'mma', label: 'MMA', emoji: '🥊' },
+  { key: 'baseball', label: 'Baseball', emoji: '⚾' },
+  { key: 'icehockey', label: 'Ice Hockey', emoji: '🏒' },
+  { key: 'americanfootball', label: 'American Football', emoji: '🏈' },
+  { key: 'tennis', label: 'Tennis', emoji: '🎾' },
+  { key: 'boxing', label: 'Boxing', emoji: '🥊' },
+  { key: 'cricket', label: 'Cricket', emoji: '🏏' },
+  { key: 'golf', label: 'Golf', emoji: '⛳' },
+  { key: 'rugbyleague', label: 'Rugby', emoji: '🏉' },
+  { key: 'aussierules', label: 'Aussie Rules', emoji: '🏉' },
+]
+
+export function getSportEmoji(sportKey: string): string {
+  if (sportKey.includes('basketball')) return '🏀'
+  if (sportKey.includes('soccer') || (sportKey.includes('football') && !sportKey.includes('american'))) return '⚽'
+  if (sportKey.includes('mma')) return '🥊'
+  if (sportKey.includes('boxing')) return '🥊'
+  if (sportKey.includes('baseball')) return '⚾'
+  if (sportKey.includes('icehockey')) return '🏒'
+  if (sportKey.includes('americanfootball')) return '🏈'
+  if (sportKey.includes('tennis')) return '🎾'
+  if (sportKey.includes('cricket')) return '🏏'
+  if (sportKey.includes('golf')) return '⛳'
+  if (sportKey.includes('rugby')) return '🏉'
+  if (sportKey.includes('aussierules')) return '🏉'
+  return '🏆'
+}
+
+export function getSportCategory(sportKey: string): SportCategory {
+  if (sportKey.includes('basketball')) return 'basketball'
+  if (sportKey.includes('soccer') || (sportKey.includes('football') && !sportKey.includes('american'))) return 'soccer'
+  if (sportKey.includes('mma')) return 'mma'
+  if (sportKey.includes('baseball')) return 'baseball'
+  if (sportKey.includes('icehockey')) return 'icehockey'
+  if (sportKey.includes('americanfootball')) return 'americanfootball'
+  if (sportKey.includes('tennis')) return 'tennis'
+  if (sportKey.includes('boxing')) return 'boxing'
+  if (sportKey.includes('cricket')) return 'cricket'
+  if (sportKey.includes('golf')) return 'golf'
+  if (sportKey.includes('rugby')) return 'rugbyleague'
+  if (sportKey.includes('aussierules')) return 'aussierules'
+  return 'all'
+}
+
+export function getSportLabel(sportKey: string): string {
+  const map: Record<string, string> = {
+    'basketball_nba': 'NBA',
+    'basketball_ncaab': 'NCAAB',
+    'soccer_epl': 'EPL',
+    'soccer_spain_la_liga': 'La Liga',
+    'soccer_germany_bundesliga': 'Bundesliga',
+    'soccer_italy_serie_a': 'Serie A',
+    'soccer_france_ligue_one': 'Ligue 1',
+    'soccer_uefa_champs_league': 'UCL',
+    'soccer_usa_mls': 'MLS',
+    'soccer_sweden_allsvenskan': 'Allsvenskan',
+    'mma_mixed_martial_arts': 'MMA',
+    'baseball_mlb': 'MLB',
+    'baseball_mlb_preseason': 'MLB Pre',
+    'icehockey_nhl': 'NHL',
+    'americanfootball_nfl': 'NFL',
+    'americanfootball_ncaaf': 'NCAAF',
+    'tennis_atp_miami_open': 'ATP Miami',
+    'tennis_wta_miami_open': 'WTA Miami',
+    'boxing_boxing': 'Boxing',
+    'cricket_ipl': 'IPL',
+    'cricket_international_t20': 'T20',
+    'rugbyleague_nrl': 'NRL',
+    'golf_masters_tournament_winner': 'Masters',
+  }
+  return map[sportKey] || sportKey.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')
+}
+
+export function decimalOddsToCents(odds: number): number {
+  if (odds <= 1) return 50
+  return Math.round(100 / odds)
+}
+
+function generateMockData(): SportsEvent[] {
+  // Dates relative to late March 2026
+  const now = new Date()
+  const today = (h: number, m: number) => {
+    const d = new Date(now)
+    d.setHours(h, m, 0, 0)
+    return d.toISOString()
+  }
+  const tomorrow = (h: number, m: number) => {
+    const d = new Date(now)
+    d.setDate(d.getDate() + 1)
+    d.setHours(h, m, 0, 0)
+    return d.toISOString()
+  }
+  const dayAfter = (h: number, m: number) => {
+    const d = new Date(now)
+    d.setDate(d.getDate() + 2)
+    d.setHours(h, m, 0, 0)
+    return d.toISOString()
+  }
+
+  const mkBookmaker = (h2h: [number, number], spreads?: { points: [number, number]; prices: [number, number] }, totals?: { point: number; prices: [number, number] }): OddsBookmaker[] => {
+    const markets: OddsMarket[] = [
+      { key: 'h2h', outcomes: [{ name: 'HOME', price: h2h[0] }, { name: 'AWAY', price: h2h[1] }] },
+    ]
+    if (spreads) {
+      markets.push({
+        key: 'spreads',
+        outcomes: [
+          { name: 'HOME', price: spreads.prices[0], point: spreads.points[0] },
+          { name: 'AWAY', price: spreads.prices[1], point: spreads.points[1] },
+        ],
+      })
+    }
+    if (totals) {
+      markets.push({
+        key: 'totals',
+        outcomes: [
+          { name: 'Over', price: totals.prices[0], point: totals.point },
+          { name: 'Under', price: totals.prices[1], point: totals.point },
+        ],
+      })
+    }
+    return [{ key: 'fanduel', title: 'FanDuel', markets }]
+  }
+
+  return [
+    {
+      id: 'nba-1',
+      sport_key: 'basketball_nba',
+      sport_title: 'NBA',
+      commence_time: today(23, 30),
+      home_team: 'Boston Celtics',
+      away_team: 'Milwaukee Bucks',
+      bookmakers: mkBookmaker([1.65, 2.30], { points: [-4.5, 4.5], prices: [1.91, 1.91] }, { point: 224.5, prices: [1.87, 1.95] }),
+    },
+    {
+      id: 'nba-2',
+      sport_key: 'basketball_nba',
+      sport_title: 'NBA',
+      commence_time: tomorrow(0, 0),
+      home_team: 'Los Angeles Lakers',
+      away_team: 'Golden State Warriors',
+      bookmakers: mkBookmaker([2.10, 1.75], { points: [3.5, -3.5], prices: [1.93, 1.89] }, { point: 231.5, prices: [1.91, 1.91] }),
+    },
+    {
+      id: 'epl-1',
+      sport_key: 'soccer_epl',
+      sport_title: 'EPL',
+      commence_time: tomorrow(15, 0),
+      home_team: 'Arsenal',
+      away_team: 'Manchester City',
+      bookmakers: mkBookmaker([2.40, 2.90], undefined, { point: 2.5, prices: [1.80, 2.05] }),
+    },
+    {
+      id: 'ufc-1',
+      sport_key: 'mma_mixed_martial_arts',
+      sport_title: 'UFC',
+      commence_time: dayAfter(22, 0),
+      home_team: 'Islam Makhachev',
+      away_team: 'Charles Oliveira',
+      bookmakers: mkBookmaker([1.45, 2.80]),
+    }
+  ].map(e => {
+    const bm = e.bookmakers[0]
+    bm.markets.forEach(m => {
+      if (m.key === 'h2h' || m.key === 'spreads') {
+        m.outcomes[0].name = e.home_team
+        m.outcomes[1].name = e.away_team
+      }
+    })
+    return e
+  })
+}
+
+// 1. /sports list: poll once/day (free), cache indefinitely (86400s)
+export async function getActiveSports(apiKey: string): Promise<Sport[]> {
+  const res = await fetch(`${ODDS_API_BASE}/sports/?apiKey=${apiKey}`, {
+    next: { revalidate: 86400 } // 24 hours
+  })
+  if (!res.ok) return []
+  const sports: Sport[] = await res.json()
+  return sports.filter(s =>
+    s.active &&
+    !s.has_outrights &&
+    !s.key.includes('_winner') &&
+    !s.key.includes('_championship') &&
+    !s.key.includes('super_bowl') &&
+    !s.key.includes('world_series') &&
+    !s.key.includes('_cup_winner') &&
+    !s.key.includes('political') &&
+    !s.key.includes('politics')
+  )
+}
+
+// 2. Upcoming sports odds: poll every 6 hours (21600s). Returns next 8 games across ALL sports.
+export async function getUpcomingEvents(apiKey: string): Promise<SportsEvent[]> {
+  // We use the upcoming endpoint which fetches the next 8 games globally
+  const res = await fetch(
+    `${ODDS_API_BASE}/sports/upcoming/odds/?apiKey=${apiKey}&regions=us&markets=h2h,spreads,totals`,
+    { next: { revalidate: 21600 } } // 6 hours
+  )
+  if (!res.ok) {
+    console.error('Failed to fetch upcoming events:', res.status)
+    return []
+  }
+  return res.json()
+}
+
+// 3. For individual sports pages: poll specific sport only when a user visits that sport. Cache 1 hour (3600s).
+export async function getSportEvents(apiKey: string, sportKey: string): Promise<SportsEvent[]> {
+  const res = await fetch(
+    `${ODDS_API_BASE}/sports/${sportKey}/odds/?apiKey=${apiKey}&regions=us&markets=h2h,spreads,totals`,
+    { next: { revalidate: 3600 } } // 1 hour
+  )
+  if (!res.ok) {
+    console.error(`Failed to fetch events for sport ${sportKey}:`, res.status)
+    return []
+  }
+  return res.json()
+}
+
+// 4. Resolution checks: Specific event by ID (we can use the scores endpoint for resolution)
+// Not implemented in this file directly as this is usually polled from an API route near completion time
+
+// Main function to get sports for the homepage (uses upcoming)
+export async function getSportsEvents(): Promise<SportsEvent[]> {
+  const apiKey = process.env.ODDS_API_KEY
+  console.log('ODDS_API_KEY present:', !!apiKey)
+
+  if (apiKey) {
+    try {
+      const events = await getUpcomingEvents(apiKey)
+      console.log(`Fetched ${events.length} upcoming sports events from API (6hr cache)`)
+      if (events.length > 0) return events
+    } catch (err) {
+      console.error('Sports API fetch failed:', err)
+      // Fall through to mock
+    }
+  }
+
+  return generateMockData()
+}

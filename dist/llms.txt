@@ -1,0 +1,42 @@
+# Blizz Markets
+
+## About
+Blizz Markets is a prediction market and token launchpad platform built on Base, the Ethereum Layer 2 network developed by Coinbase. The platform enables users to trade on real-world event outcomes, bet on sports, and launch tokens via bonding curve mechanics.
+
+## Key Facts
+- Platform: blizzmarkets.com
+- Blockchain: Base (Coinbase L2)
+- Collateral: USDC
+- Operator: Meta Bliss Group B.V., a subsidiary of 36 Group AB (NGM: 36GRP)
+- Status: Beta (testnet)
+
+## Products
+1. Prediction Markets - Binary outcome markets (YES/NO) on crypto, politics, sports, tech, culture. On-chain settlement via CPMM (Constant Product Market Maker).
+2. Sports Betting - Moneyline, spread, and over/under markets on 45+ leagues including NBA, EPL, La Liga, UFC, MLB, NHL, NCAAB, IPL, and more.
+3. Token Launchpad - Create and trade tokens with automated bonding curve pricing. Fair launch, instant liquidity.
+4. BLIZZ Token - Native utility token (planned).
+
+## Technology
+- Smart contracts: Solidity 0.8.20, audited, deployed on Base Sepolia testnet
+- Frontend: Next.js, TypeScript, Tailwind CSS
+- Wallet: Reown AppKit (WalletConnect)
+- Data feeds: The Odds API (sports), Polymarket API (prediction markets), DexScreener (tokens), DeFiLlama (yields)
+- Security: Multiple independent smart contract audits, SafeERC20, ReentrancyGuard, slippage protection, trade caps, circuit breakers
+
+## Revenue Model
+Platform fee (1-2%) on each trade. Users trade against each other (peer-to-peer), the platform takes no directional risk.
+
+## Links
+- Website: https://blizzmarkets.com
+- Sports: https://blizzmarkets.com/sports
+- Markets: https://blizzmarkets.com/markets
+- Launchpad: https://blizzmarkets.com/launchpad
+- Terms: https://blizzmarkets.com/terms
+- Privacy: https://blizzmarkets.com/privacy
+- Support: https://blizzmarkets.com/support
+- Twitter/X: https://x.com/blizzcasino
+- Discord: https://discord.gg/dK6UMvNf
+- Telegram: https://t.me/blizzcrypto
+
+## Parent Company
+36 Group AB is a Swedish publicly listed gaming technology company (NGM: 36GRP) operating crypto casino brands and B2B gaming technology.

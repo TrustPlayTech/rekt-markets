@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rekt-bg: #0A1628;
+  --color-rekt-card: #121E33;
+  --color-rekt-border: #1a2d47;
+  --color-rekt-blue: #6EC8FF;
+  --color-rekt-gold: #F5A623;
+  --color-rekt-frost: #A8E0FF;
+  --color-rekt-text: #E8EDF2;
+  --color-rekt-muted: #7A8BA3;
+  --color-rekt-green: #00E576;
+  --color-rekt-red: #FF4D4D;
+  --color-rekt-dark: #0A1628;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-rekt-bg);
+  color: var(--color-rekt-text);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-rekt-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-rekt-border);
+  border-radius: 3px;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes slide-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-slide-left {
+  animation: slide-left 30s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Trade panel animations */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-in-bottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.25s ease-out;
+}
+
+.animate-slide-in-bottom {
+  animation: slide-in-bottom 0.25s ease-out;
+}

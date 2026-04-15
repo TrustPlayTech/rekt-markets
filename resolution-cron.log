@@ -1,0 +1,16 @@
+[2026-03-27T19:31:52.373Z] === Resolution Cron Started ===
+[2026-03-27T19:31:52.376Z] RPC: https://base-sepolia.g.alchemy.com/v2/qHJU5KP9m1km...
+[2026-03-27T19:31:52.376Z] Chain: Base Sepolia
+[2026-03-27T19:31:52.376Z] Resolver: 0xb251987ABfc2F34f5B16C1D43962e93a474b5526
+[2026-03-27T19:31:52.376Z] Interval: 900s
+[2026-03-27T19:31:52.376Z] Registry: /home/openclaw/.openclaw/workspace/blizzmarkets/src/lib/sports-registry.json
+[2026-03-27T19:31:52.376Z] --- Resolution cycle starting ---
+[2026-03-27T19:31:52.879Z] Game 9693d8c4274c9eabbcb9ab22fcf44936 not found in scores API
+[2026-03-27T19:31:53.080Z] Game 20907151ed2de3c55309ff635a0b4f53 not found in scores API
+[2026-03-27T19:31:53.325Z] Game 3791f62ad672c74a9eaaf206188b1696 not found in scores API
+[2026-03-27T19:31:53.530Z] Game d6018addbf422198251c0674270b87f3 not found in scores API
+[2026-03-27T19:31:53.768Z] Game 3cd97096b11e331414ff5b0b6c515f5c not found in scores API
+[2026-03-27T19:31:53.976Z] Game 9d16ebba2fd9d005cddea05f25e60145 not found in scores API
+[2026-03-27T19:31:54.183Z] Game c4901bf9c9ebf81236d22ca4626b5a31 not found in scores API
+[2026-03-27T19:31:54.358Z] Game 3ffbb865981907829bb58d7f86351ba0 not found in scores API
+[2026-03-27T19:31:54.358Z] --- Cycle complete. 0 resolved this cycle, 8 still pending ---
