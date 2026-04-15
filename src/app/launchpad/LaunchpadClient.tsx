@@ -38,7 +38,7 @@ function TokenCard({ token, index }: { token: DexToken; index: number }) {
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-white truncate group-hover:text-rekt-blue transition-colors">
+          <h3 className="text-base font-semibold text-white truncate group-hover:text-rekt-blue transition-colors">
             {token.description?.slice(0, 30) || `Token #${index + 1}`}
           </h3>
           <span className="rounded bg-rekt-blue/10 px-1.5 py-0.5 text-[10px] text-rekt-blue">{chainLabel}</span>
@@ -89,11 +89,12 @@ export default function LaunchpadClient({ boosted, profiles }: { boosted: DexTok
   }, [deduped, search])
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="mx-auto max-w-7xl px-6 py-8 space-y-6">
+      <div className="rounded-[28px] border border-border bg-card/68 p-6 md:p-8 shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="font-display text-3xl font-bold text-white">Token Launchpad</h1>
-          <p className="mt-2 text-rekt-muted">Discover trending tokens and launch your own</p>
+          <h1 className="font-display text-4xl font-bold text-white">Token Launchpad</h1>
+          <p className="mt-2 text-rekt-muted">Discover trending tokens and launch your own in a layout that now sits much closer to the casino shell.</p>
         </div>
         <Link
           href={TRADING_ENABLED ? "/launchpad/create" : "/waitlist"}
@@ -103,9 +104,11 @@ export default function LaunchpadClient({ boosted, profiles }: { boosted: DexTok
           Create Token
         </Link>
       </div>
+      </div>
 
       {/* Search + Tabs */}
-      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center">
+      <div className="rounded-2xl border border-border bg-card/58 p-4 shadow-[0_14px_34px_rgba(0,0,0,0.14)]">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rekt-muted" />
           <input
@@ -134,6 +137,7 @@ export default function LaunchpadClient({ boosted, profiles }: { boosted: DexTok
             <Rocket className="h-4 w-4" /> New
           </button>
         </div>
+        </div>
       </div>
 
       {/* On-Chain Tokens */}
@@ -148,7 +152,7 @@ export default function LaunchpadClient({ boosted, profiles }: { boosted: DexTok
         </div>
       ) : (
         <>
-          <div className="mb-3 rounded-lg bg-rekt-card/50 border border-rekt-border px-3 py-2">
+          <div className="rounded-xl bg-rekt-card/50 border border-rekt-border px-4 py-3">
             <p className="text-[11px] text-rekt-muted">
               Third-party tokens on Base.
             </p>

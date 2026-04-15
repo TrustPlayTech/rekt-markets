@@ -228,14 +228,14 @@ export default function PortfolioPage() {
   const hasAnyHoldings = positions.length > 0 || holdings.length > 0
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold text-white">Portfolio</h1>
-        <p className="mt-1 text-sm text-rekt-muted">{address}</p>
+    <div className="mx-auto max-w-7xl px-6 py-8 space-y-6">
+      <div className="rounded-[28px] border border-border bg-card/68 p-6 md:p-8 shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
+        <h1 className="font-display text-4xl font-bold text-white">Portfolio</h1>
+        <p className="mt-2 text-sm text-rekt-muted break-all">{address}</p>
       </div>
 
       {/* Summary Cards */}
-      <div className="mb-8 grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         <div className="rounded-xl border border-rekt-border bg-rekt-card p-6">
           <div className="text-sm text-rekt-muted">Total Portfolio Value</div>
           {isLoading ? (
@@ -275,7 +275,7 @@ export default function PortfolioPage() {
       </div>
 
       {/* USDC Balance Card */}
-      <div className="mb-8 rounded-xl border border-rekt-border bg-rekt-card p-6 inline-block">
+      <div className="rounded-xl border border-rekt-border bg-rekt-card p-6 inline-block">
         <div className="text-sm text-rekt-muted">USDC Balance</div>
         {usdcLoading ? (
           <Skeleton className="mt-2 h-7 w-24" />

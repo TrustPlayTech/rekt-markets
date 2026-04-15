@@ -26,12 +26,12 @@ export default async function HomePage() {
   ]
 
   return (
-    <div>
+    <div className="mx-auto max-w-[1320px] px-4 py-8 md:px-6 space-y-8">
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden rounded-[28px] border border-border bg-gradient-to-r from-primary/20 via-background to-background shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
         <div className="absolute inset-0 bg-gradient-to-b from-rekt-blue/5 via-transparent to-transparent" />
         <div className="absolute top-20 left-1/2 -translate-x-1/2 h-96 w-96 rounded-full bg-rekt-blue/10 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
+        <div className="relative mx-auto max-w-7xl px-8 py-16 md:px-12 md:py-20">
           <div className="flex flex-col items-center md:flex-row md:justify-between md:gap-12">
             <div className="text-center md:text-left md:flex-1">
 
@@ -64,11 +64,11 @@ export default async function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="border-y border-rekt-border bg-rekt-card/50">
-        <div className="mx-auto max-w-7xl px-4 pt-4 pb-1">
+      <section className="rounded-[28px] border border-border bg-card/72 shadow-[0_18px_44px_rgba(0,0,0,0.22)]">
+        <div className="mx-auto max-w-7xl px-6 pt-4 pb-1">
           <p className="text-[10px] text-rekt-muted/60 text-center uppercase tracking-widest">Global Prediction Market Stats</p>
         </div>
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 pb-6 pt-2 md:grid-cols-4">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-6 pb-6 pt-2 md:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="flex items-center gap-3 px-4">
               <s.icon className="h-5 w-5 text-rekt-blue" />
@@ -84,8 +84,8 @@ export default async function HomePage() {
 
 
       {/* Rekt Ecosystem */}
-      <section className="border-y border-rekt-border bg-rekt-card/30">
-        <div className="mx-auto max-w-7xl px-4 py-20">
+      <section className="rounded-[28px] border border-border bg-card/55 shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
+        <div className="mx-auto max-w-7xl px-6 py-16">
           <div className="mb-10 text-center">
             <h2 className="font-display text-3xl font-bold text-white md:text-4xl">The Rekt Ecosystem</h2>
             <p className="mx-auto mt-3 max-w-xl text-rekt-muted">One ecosystem. Infinite possibilities. Casino, markets, and launchpad -- all connected.</p>
@@ -153,7 +153,7 @@ export default async function HomePage() {
         }).filter(Boolean)
 
         return (
-          <section className="border-b border-rekt-border bg-rekt-card/30 py-4 overflow-hidden">
+          <section className="rounded-[28px] border border-border bg-card/55 py-4 overflow-hidden shadow-[0_16px_36px_rgba(0,0,0,0.18)]">
             <div className="flex animate-slide-left whitespace-nowrap" style={{ width: '200%' }}>
               {[...trendingMarkets, ...trendingMarkets].map((event, i) => {
                 const market = getBestMarket(event)
@@ -190,7 +190,7 @@ export default async function HomePage() {
       })()}
 
       {/* CTA */}
-      <section className="mx-auto max-w-7xl px-4 py-20 text-center">
+      <section className="mx-auto max-w-7xl rounded-[28px] border border-border bg-card/62 px-6 py-16 text-center shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
         <h2 className="font-display text-3xl font-bold text-white md:text-4xl">Ready to start trading?</h2>
         <p className="mx-auto mt-4 max-w-xl text-rekt-muted">
           Join thousands of traders making predictions and launching tokens on Rekt Markets.

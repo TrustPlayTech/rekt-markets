@@ -1,114 +1,48 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-import { Menu, X, ExternalLink } from 'lucide-react'
+import Image from 'next/image'
 import WalletButton from './WalletButton'
-import BrandMark from './BrandMark'
-
-const navItems = [
-  { href: '/sports', label: 'Sports' },
-  { href: '/markets', label: 'Markets' },
-  { href: '/launchpad', label: 'Launchpad' },
-  { href: 'https://rektpalace.com', label: 'Casino', external: true },
-  { href: '/portfolio', label: 'Portfolio' },
-]
 
 export default function Header() {
-  const pathname = usePathname()
-  const [mobileOpen, setMobileOpen] = useState(false)
-
   return (
-    <header className="sticky top-0 z-50 border-b border-rekt-border bg-rekt-dark/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <BrandMark />
+    <header className="fixed top-0 left-0 right-0 z-50 h-14 border-b border-white/8 bg-card/96 backdrop-blur-md">
+      <div className="flex h-full items-center justify-between gap-4 px-4 md:pl-[15rem] md:pr-6">
+        <Link href="/" className="flex items-center flex-shrink-0">
+          <Image
+            src="/rekt-logo-transparent.png"
+            alt="Rekt Palace"
+            width={124}
+            height={48}
+            className="h-8 w-auto md:h-9"
+            priority
+          />
+        </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) =>
-            item.external ? (
-              <a
-                key={item.href}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-rekt-muted hover:text-white transition-colors"
-              >
-                {item.label}
-                <ExternalLink className="h-3 w-3" />
-              </a>
-            ) : (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  pathname?.startsWith(item.href)
-                    ? 'bg-rekt-blue/10 text-rekt-blue'
-                    : 'text-rekt-muted hover:text-white'
-                }`}
-              >
-                {item.label}
-              </Link>
-            )
-          )}
-        </nav>
-
-        <div className="flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/markets"
+            className="hidden lg:flex relative w-80 xl:w-96 items-center rounded-xl border border-border bg-background/90 px-4 py-2 text-sm text-foreground/72 hover:border-primary/40 hover:text-white transition-colors"
+          >
+            <svg className="mr-3 h-4 w-4 text-foreground/55" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            Search prediction markets, sports, tokens...
+          </Link>
           <Link
             href="/waitlist"
-            className="hidden rounded-lg bg-rekt-gold px-4 py-2 text-sm font-medium text-rekt-dark hover:opacity-80 transition-opacity md:block"
+            className="hidden md:inline-flex rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary-hover"
           >
             Founders List
           </Link>
-          <div className="hidden md:block">
-            <WalletButton />
-          </div>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="rounded-lg p-2 text-rekt-muted hover:text-white md:hidden"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <WalletButton />
         </div>
       </div>
-
-      {mobileOpen && (
-        <div className="border-t border-rekt-border bg-rekt-dark px-4 py-4 md:hidden">
-          <nav className="flex flex-col gap-2">
-            {navItems.map((item) =>
-              item.external ? (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-1 rounded-lg px-4 py-3 text-sm font-medium text-rekt-muted hover:text-white transition-colors"
-                >
-                  {item.label}
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={`rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
-                    pathname?.startsWith(item.href)
-                      ? 'bg-rekt-blue/10 text-rekt-blue'
-                      : 'text-rekt-muted hover:text-white'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              )
-            )}
-          </nav>
-          <div className="mt-4">
-            <WalletButton />
-          </div>
-        </div>
-      )}
     </header>
   )
 }

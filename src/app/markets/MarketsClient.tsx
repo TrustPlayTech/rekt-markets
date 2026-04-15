@@ -56,11 +56,12 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
   }, [enrichedEvents, search, category])
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="mx-auto max-w-7xl px-6 py-8 space-y-6">
+      <div className="rounded-[28px] border border-border bg-card/68 p-6 md:p-8 shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="font-display text-3xl font-bold text-white">Prediction Markets</h1>
-          <p className="mt-2 text-rekt-muted">Trade on the outcome of real-world events</p>
+          <h1 className="font-display text-4xl font-bold text-white">Prediction Markets</h1>
+          <p className="mt-2 text-rekt-muted">Trade on the outcome of real-world events in a Rekt Palace native shell.</p>
         </div>
         <Link
           href={TRADING_ENABLED ? "/markets/create" : "/waitlist"}
@@ -70,11 +71,12 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
           Create Market
         </Link>
       </div>
+      </div>
 
       {/* Featured Markets */}
       {FEATURED_MARKETS.length > 0 && (
-        <div className="mb-8">
-          <h2 className="font-display text-xl font-bold text-white mb-4">Featured</h2>
+        <div className="rounded-[28px] border border-border bg-card/58 p-6 shadow-[0_16px_38px_rgba(0,0,0,0.16)]">
+          <h2 className="font-display text-2xl font-bold text-white mb-4">Featured</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {FEATURED_MARKETS.map((fm, i) => (
               <Link
@@ -98,7 +100,8 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
       )}
 
       {/* Tab switcher */}
-      <div className="mb-6 flex gap-2 border-b border-rekt-border">
+      <div className="rounded-2xl border border-border bg-card/58 p-2 shadow-[0_14px_34px_rgba(0,0,0,0.14)]">
+        <div className="flex gap-2 border-b border-rekt-border px-2">
         <button
           onClick={() => setTab('polymarket')}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
@@ -121,6 +124,7 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
           <Zap className="h-4 w-4" />
           On-Chain Markets
         </button>
+        </div>
       </div>
 
       {tab === 'onchain' ? (
@@ -131,7 +135,8 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
       ) : (
         <>
           {/* Search */}
-          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center">
+          <div className="rounded-2xl border border-border bg-card/58 p-4 shadow-[0_14px_34px_rgba(0,0,0,0.14)]">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rekt-muted" />
               <input
@@ -142,10 +147,11 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
                 className="w-full rounded-xl border border-rekt-border bg-rekt-card py-3 pl-10 pr-4 text-sm text-white placeholder-rekt-muted outline-none focus:border-rekt-blue/50"
               />
             </div>
+            </div>
           </div>
 
           {/* Filter Tabs */}
-          <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
+          <div className="flex gap-2 overflow-x-auto pb-2">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -195,7 +201,7 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
                         )}
                       </div>
                     </div>
-                    <h3 className="mb-2 text-sm font-semibold text-white line-clamp-2 group-hover:text-rekt-blue transition-colors">
+                    <h3 className="mb-2 text-base font-semibold text-white line-clamp-2 group-hover:text-rekt-blue transition-colors">
                       {cleanMarketTitle(event.title, market)}
                     </h3>
                     {market.groupItemTitle && (
@@ -235,7 +241,7 @@ export default function MarketsClient({ events }: { events: PolymarketEvent[] })
                         <BarChart3 className="h-5 w-5 text-rekt-blue" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-bold text-white line-clamp-2 mb-2">
+                        <h3 className="text-base font-bold text-white line-clamp-2 mb-2">
                           {cleanMarketTitle(event.title, market)}
                         </h3>
                         <div className="flex gap-2 mb-3">

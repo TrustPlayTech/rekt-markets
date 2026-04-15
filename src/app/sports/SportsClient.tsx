@@ -417,7 +417,7 @@ function GameCard({
   }
 
   return (
-    <div className={`rounded-xl border bg-rekt-card p-4 transition-all ${activeTrade ? 'border-rekt-blue/50' : 'border-rekt-border hover:border-rekt-blue/30'}`}>
+    <div className={`rounded-2xl border bg-rekt-card p-5 transition-all ${activeTrade ? 'border-rekt-blue/50 shadow-[0_0_20px_rgba(108,92,231,0.12)]' : 'border-rekt-border hover:border-rekt-blue/30'}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -445,9 +445,9 @@ function GameCard({
       {/* Teams */}
       <div className="mb-3">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white">{event.home_team}</span>
+          <span className="text-base font-semibold text-white">{event.home_team}</span>
           <span className="text-xs text-rekt-muted">vs</span>
-          <span className="text-sm font-semibold text-white text-right">{event.away_team}</span>
+          <span className="text-base font-semibold text-white text-right">{event.away_team}</span>
         </div>
       </div>
 
@@ -643,11 +643,11 @@ export default function SportsClient({ events }: { events: SportsEvent[] }) {
   }, [filtered])
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto max-w-7xl px-6 py-8 space-y-6">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold text-white">Sports Markets</h1>
-        <p className="mt-2 text-rekt-muted">Trade on live and upcoming sporting events</p>
+      <div className="rounded-[28px] border border-border bg-card/68 p-6 md:p-8 shadow-[0_18px_44px_rgba(0,0,0,0.18)]">
+        <h1 className="font-display text-4xl font-bold text-white">Sports Markets</h1>
+        <p className="mt-2 text-rekt-muted">Trade on live and upcoming sporting events with higher contrast, cleaner cards, and a casino-native shell.</p>
         {TRADING_ENABLED && registry.size > 0 && (
           <p className="mt-1 text-xs text-green-400">
             {registry.size} on-chain markets available for trading
@@ -656,7 +656,7 @@ export default function SportsClient({ events }: { events: SportsEvent[] }) {
       </div>
 
       {/* Search bar */}
-      <div className="mb-4 relative">
+      <div className="rounded-2xl border border-border bg-card/58 p-4 relative shadow-[0_14px_34px_rgba(0,0,0,0.14)]">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rekt-muted" />
         <input
           type="text"
@@ -668,7 +668,7 @@ export default function SportsClient({ events }: { events: SportsEvent[] }) {
       </div>
 
       {/* Sport filter tabs */}
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
+      <div className="flex gap-2 overflow-x-auto pb-2">
         {SPORT_CATEGORIES.map((cat) => (
           <button
             key={cat.key}
@@ -687,7 +687,7 @@ export default function SportsClient({ events }: { events: SportsEvent[] }) {
 
       {/* Events grouped by sport */}
       {grouped.length === 0 ? (
-        <div className="rounded-xl border border-rekt-border bg-rekt-card p-12 text-center">
+        <div className="rounded-2xl border border-rekt-border bg-rekt-card p-12 text-center">
           <p className="text-rekt-muted">No events found for this category</p>
         </div>
       ) : (

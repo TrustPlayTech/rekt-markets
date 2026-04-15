@@ -3,8 +3,8 @@ import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
 import Header from '@/components/Header'
+import Sidebar from '@/components/Sidebar'
 import Footer from '@/components/Footer'
-import BottomNav from '@/components/BottomNav'
 import CookieBanner from '@/components/CookieBanner'
 import SanctionsCheck from '@/components/SanctionsCheck'
 import TawkTo from '@/components/TawkTo'
@@ -16,8 +16,8 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space
 
 export const metadata: Metadata = {
   title: {
-    default: 'Rekt Markets - Prediction Markets & Token Launchpad',
-    template: '%s | Rekt Markets',
+    default: 'Rekt Palace Prediction Markets',
+    template: '%s | Rekt Palace',
   },
   description: 'Trade on real-world events, trade on sports, and launch tokens on Base. The all-in-one platform for prediction markets, sports trading, and token launches.',
   keywords: ['prediction markets', 'sports trading', 'token launchpad', 'crypto trading', 'Base blockchain', 'DeFi', 'USDC', 'on-chain trading'],
@@ -92,10 +92,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen bg-rekt-dark font-sans antialiased">
         <Providers><PostHogProvider>
-          <Header />
-          <main className="min-h-[calc(100vh-4rem)] pb-16 md:pb-0">{children}</main>
-          <Footer />
-          <BottomNav />
+          <div className="page-gradient min-h-screen">
+            <Header />
+            <Sidebar />
+            <main className="min-h-[calc(100vh-3.5rem)] pt-14 md:pl-56">{children}</main>
+            <Footer />
+          </div>
           <CookieBanner />
           <SanctionsCheck />
           <TawkTo />

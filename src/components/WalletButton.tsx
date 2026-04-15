@@ -18,7 +18,7 @@ export default function WalletButton() {
       <>
         <button
           onClick={logout}
-          className="flex items-center gap-2 rounded-xl bg-rekt-card border border-rekt-border px-4 py-2 text-sm font-medium text-white hover:border-rekt-blue/30 transition-colors"
+          className="flex items-center gap-2 rounded-xl bg-card border border-border px-4 py-2 text-sm font-semibold text-foreground hover:border-primary/30 transition-colors"
         >
           {displayAddress ? `${displayAddress.slice(0, 6)}...${displayAddress.slice(-4)}` : 'Connected'}
         </button>
@@ -37,7 +37,7 @@ export default function WalletButton() {
             setShowWaitlist(true)
           }
         }}
-        className="flex items-center gap-2 rounded-xl bg-rekt-blue/10 border border-rekt-blue/30 px-4 py-2 text-sm font-medium text-rekt-blue hover:bg-rekt-blue/20 transition-colors"
+        className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors"
       >
         <Wallet className="h-4 w-4" />
         Connect Wallet
