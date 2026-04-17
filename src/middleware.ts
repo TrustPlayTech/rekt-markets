@@ -60,22 +60,29 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Demo password gate (staging/preview deployments)
+  // Password gate — active when DEMO_PASSWORD env var is set
   if (DEMO_PASSWORD) {
-    if (pathname === '/demo-login') return NextResponse.next()
+    // Always public: coming-soon page, waitlist API, login
+    if (
+      pathname === '/coming-soon' ||
+      pathname === '/login' ||
+      pathname.startsWith('/api/waitlist')
+    ) return NextResponse.next()
+
     const authed = request.cookies.get('demo-auth')
     if (authed?.value === DEMO_PASSWORD) {
-      // authenticated, continue
+      // Cookie valid — let through
     } else if (request.nextUrl.searchParams.get('password') === DEMO_PASSWORD) {
       const response = NextResponse.redirect(new URL('/', request.url))
       response.cookies.set('demo-auth', DEMO_PASSWORD, {
         maxAge: 86400 * 7,
         path: '/',
         sameSite: 'lax',
+        httpOnly: true,
       })
       return response
     } else {
-      return NextResponse.rewrite(new URL('/demo-login', request.url))
+      return NextResponse.rewrite(new URL('/coming-soon', request.url))
     }
   }
 

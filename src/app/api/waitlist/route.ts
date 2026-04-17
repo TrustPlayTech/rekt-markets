@@ -1,61 +1,73 @@
-import { Resend } from 'resend'
-import { NextResponse } from 'next/server'
-import { rateLimit } from '@/lib/rate-limit'
+import { NextRequest, NextResponse } from 'next/server'
 
-function getResend() {
-  const key = process.env.RESEND_API_KEY
-  if (!key) throw new Error('RESEND_API_KEY not set')
-  return new Resend(key)
-}
-
-export async function POST(req: Request) {
-  // Rate limit: 5 submissions per minute per IP
-  const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
-  const { allowed } = rateLimit(`waitlist:${ip}`, 5, 60_000)
-  if (!allowed) {
-    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    const { email, inviteCode } = await req.json()
+    const body = await req.json()
+    const email = (body.email as string)?.trim().toLowerCase()
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email required' }, { status: 400 })
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 })
     }
 
-    // Send notification to team
-    await getResend().emails.send({
-      from: 'Rekt Markets <waitlist@markets.rektpalace.com>',
-      to: ['waitlist@markets.rektpalace.com', 'chris.steele@tangiamo.com'],
-      subject: `New Founders List Signup: ${email}${inviteCode ? ` [${inviteCode}]` : ''}`,
-      html: `
-        <h2>New Founders List Signup</h2>
-        <p><strong>Email:</strong> ${email}</p>
-        ${inviteCode ? `<p><strong>Invite Code:</strong> ${inviteCode}</p>` : '<p><em>No invite code</em></p>'}
-        <p><em>Submitted at ${new Date().toISOString()}</em></p>
-      `,
-    })
+    const resendApiKey = process.env.RESEND_API_KEY
+    const notifyEmail = process.env.WAITLIST_NOTIFY_EMAIL || 'gideon.frost@36.group'
 
-    // Send confirmation to user
-    await getResend().emails.send({
-      from: 'Rekt Markets <waitlist@markets.rektpalace.com>',
-      to: email,
-      subject: 'Welcome to the Rekt Markets Founders List',
-      html: `
-        <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
-          <h2 style="color: #6EC8FF;">You're on the Founders List! ⚡</h2>
-          <p>Thanks for signing up for early access to Rekt Markets.</p>
-          ${inviteCode ? `<p>Your invite code: <strong>${inviteCode}</strong></p>` : ''}
-          <p>We're building the next generation of prediction markets and token launches on Base. You'll be one of the first to access the platform, and we'll let you know as soon as it's your turn.</p>
-          <p>Stay tuned!</p>
-          <p style="color: #888; font-size: 12px; margin-top: 30px;">Rekt Markets - Predict. Launch. Play.</p>
-        </div>
-      `,
-    })
+    if (resendApiKey) {
+      // Send admin notification via Resend
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Rekt Palace <noreply@rektpalace.com>',
+          to: [notifyEmail],
+          subject: `New waitlist signup: ${email}`,
+          html: `
+            <h2>New Rekt Palace Waitlist Signup</h2>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+          `,
+        }),
+      })
 
-    return NextResponse.json({ ok: true })
-  } catch (error) {
-    console.error('Waitlist error:', error)
-    return NextResponse.json({ error: 'Failed to submit' }, { status: 500 })
+      // Also send confirmation to the user
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Rekt Palace <noreply@rektpalace.com>',
+          to: [email],
+          subject: "You're on the list. 👑",
+          html: `
+            <div style="background:#0a0a0f;color:#e8e8f0;font-family:sans-serif;padding:40px;max-width:480px;margin:0 auto;border-radius:12px;">
+              <h1 style="color:#6c5ce7;font-size:28px;margin-bottom:8px;">You're in.</h1>
+              <p style="color:#9090b8;font-size:16px;line-height:1.6;margin-bottom:24px;">
+                We'll notify you the moment Rekt Palace goes live.<br>
+                The first degen super-venue is almost ready.
+              </p>
+              <p style="color:#00d4ff;font-weight:bold;font-size:14px;letter-spacing:0.05em;">
+                #RekTheHouse
+              </p>
+              <p style="color:#4a4a6a;font-size:12px;margin-top:32px;">
+                © ${new Date().getFullYear()} Rekt Palace. All rights reserved.
+              </p>
+            </div>
+          `,
+        }),
+      })
+    } else {
+      // No Resend key — log to console (dev/test mode)
+      console.log('[waitlist] New signup:', email)
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    console.error('[waitlist] Error:', err)
+    return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
   }
 }
