@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Wallet } from 'lucide-react'
 import { usePrivy } from '@privy-io/react-auth'
 import { TRADING_ENABLED } from '@/lib/trading'
@@ -11,6 +11,13 @@ export default function WalletButton() {
   const { authenticated, user, logout } = usePrivy()
   const { connect, modal } = useComplianceConnect()
   const [showWaitlist, setShowWaitlist] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
+
+  if (!mounted) {
+    return <div className="h-9 w-32 rounded-xl bg-card border border-border animate-pulse" />
+  }
 
   if (TRADING_ENABLED && authenticated) {
     const displayAddress = user?.wallet?.address
