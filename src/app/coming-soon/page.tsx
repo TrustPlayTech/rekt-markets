@@ -44,7 +44,7 @@ export default function ComingSoonPage() {
       {/* Top bar */}
       <div className="flex items-center justify-end px-6 pt-5">
         <Link
-          href="/markets"
+          href="/login"
           style={{ color: '#e8e8f0', borderColor: '#2a2a3d' }}
           className="text-sm font-semibold border rounded-lg px-4 py-2 hover:border-purple-500 hover:text-white transition-colors"
         >
