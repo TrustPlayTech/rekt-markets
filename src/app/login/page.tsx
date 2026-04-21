@@ -2,19 +2,38 @@
 
 import { useState, FormEvent, Suspense } from 'react'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 function LoginForm() {
   const [password, setPassword] = useState('')
   const searchParams = useSearchParams()
   const [error, setError] = useState(searchParams.get('error') === '1')
-  const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    if (!password.trim()) return
-    // Full page navigation so the middleware redirect + cookie set works correctly
-    window.location.href = `/?password=${encodeURIComponent(password)}`
+    if (!password.trim() || loading) return
+    setLoading(true)
+    setError(false)
+
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: password.trim() }),
+      })
+
+      if (res.ok) {
+        // Cookie set by API route — hard reload to apply it
+        window.location.href = '/'
+      } else {
+        setError(true)
+        setLoading(false)
+      }
+    } catch {
+      setError(true)
+      setLoading(false)
+    }
   }
 
   return (
@@ -40,10 +59,11 @@ function LoginForm() {
       )}
       <button
         type="submit"
+        disabled={loading}
         style={{ background: '#6c5ce7' }}
-        className="w-full rounded-xl px-6 py-3 text-sm font-bold text-white hover:opacity-90 active:scale-[0.98] transition-all"
+        className="w-full rounded-xl px-6 py-3 text-sm font-bold text-white hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
       >
-        Enter
+        {loading ? 'Checking...' : 'Enter'}
       </button>
     </form>
   )

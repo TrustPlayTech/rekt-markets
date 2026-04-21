@@ -66,28 +66,14 @@ export function middleware(request: NextRequest) {
     if (
       pathname === '/coming-soon' ||
       pathname === '/login' ||
-      pathname.startsWith('/api/waitlist')
+      pathname.startsWith('/api/waitlist') ||
+      pathname.startsWith('/api/auth')
     ) return NextResponse.next()
 
     const authed = request.cookies.get('demo-auth')
-    if (authed?.value === DEMO_PASSWORD) {
+    if (authed?.value === DEMO_PASSWORD || authed?.value === 'open') {
       // Cookie valid — let through
     } else {
-      const submittedPassword = request.nextUrl.searchParams.get('password')
-      if (submittedPassword !== null) {
-        if (submittedPassword === DEMO_PASSWORD) {
-          const response = NextResponse.redirect(new URL('/', request.url))
-          response.cookies.set('demo-auth', DEMO_PASSWORD, {
-            maxAge: 86400 * 7,
-            path: '/',
-            sameSite: 'lax',
-            httpOnly: true,
-          })
-          return response
-        } else {
-          return NextResponse.redirect(new URL('/login?error=1', request.url))
-        }
-      }
       return NextResponse.rewrite(new URL('/coming-soon', request.url))
     }
   }
